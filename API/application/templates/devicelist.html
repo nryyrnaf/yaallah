@@ -1,0 +1,11 @@
+<title>Devices List</title>
+<p>Hello, {{ session['username'] }}!</p>
+<h1>Here come the list!</h1>
+{% for device in devices %}
+  <ul>
+    <li>ID: {{ device.id }}</li>
+    <li>Name: {{ device.name }}</li>
+    <li>Type: {{ device.type }}</li>
+    <li><a href="{{ request.url }}/{{ device.id }}">Info</a></li>
+  </ul>
+{% endfor %}

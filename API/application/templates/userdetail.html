@@ -1,0 +1,17 @@
+<title>User Detail</title>
+<p>Hello, {{ session['username'] }}!</p>
+<h1>Here come the detail!</h1>
+<ul>
+  <li>ID: {{ userdetail.id }}</li>
+  <li>Name: {{ userdetail.name }}</li>
+  <li>Username: {{ userdetail.username }}</li>
+  <li>Email: {{ userdetail.email }}</li>
+  <li>Role: {{ userdetail.role }}</li>
+  <li>Subscribing:
+    <ul>
+      {% for subscribing in userdetail.subscribing %}
+      <li><a href="{{ request.url_root }}devices/{{ subscribing.id }}">{{subscribing.name}} ({{subscribing.type}})</a></li>
+      {% endfor %}
+    </ul>
+  </li>
+</ul>

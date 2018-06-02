@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            namespace = '/ws';
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+            socket.on('connect', function() {
+                socket.emit('my_event', {data: 'Client connected!'});
+                $("#idlogs").append("Connection open ...\n");
+            });
+
+            $('form#emit').submit(function(event) {
+                socket.emit('message', {data: $('#emit_data').val()});
+                return false;
+            });
+        });
+    </script>
+</head>
+
+<body>
+<textarea id="idlogs" cols='60' rows='8'>...</textarea>
+
+</body>
+
+<html>

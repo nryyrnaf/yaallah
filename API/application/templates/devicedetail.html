@@ -1,0 +1,44 @@
+<title>Devices Detail</title>
+<p>Hello, {{ session['username'] }}! (User ID: {{ session['userid'] }})</p>
+<h1>Here come the detail!</h1>
+<ul>
+  <li>ID: {{ devicedetail.id }}</li>
+  <li>Name: {{ devicedetail.name }}</li>
+  <li>Type: {{ devicedetail.type }}</li>
+  <li>Location: {{ devicedetail.location }}</li>
+  <li>Address: {{ devicedetail.address }}</li>
+  <li>Subscribed By:
+
+  {% if subscriber is not defined %}
+    None
+  {% else %}
+      <ul>
+        {% for user in devicedetail.subscribed_by %}
+        <li><a href="{{ request.url_root }}users/{{ user.username }}">{{user.username}}</a></li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endif %}
+  {% if session['userid'] not in subscriber %}
+  <form action="{{ request.url_root }}subscribe/devices" method="POST">
+    <input type="hidden" name="deviceid" value="{{ devicedetail.id }}">
+    <li><input type="submit" value="subscribe"></li>
+  </form>
+  {% else %}
+  <form action="{{ request.url_root }}unsubscribe/devices" method="POST">
+    <input type="hidden" name="deviceid" value="{{ devicedetail.id }}">
+    <li><input type="submit" value="unsubscribe"></li>
+  </form>
+  {% endif %}
+<li>OID:
+  {% if devicedetail.oid is not defined %}
+  {% else %}
+  <ul>
+    {% for oid in devicedetail.oid %}
+    <li>{{ oid.oidname }}: {{ oid.oid }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</li>
+
+</ul>

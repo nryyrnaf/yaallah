@@ -1,0 +1,45 @@
+<title>User Detail</title>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            var socket = io.connect('http://0.0.0.0:8000');
+
+            socket.on('connect', function() {
+                $("#idlogs").text("Connected");
+                var deviceid = [];
+                $('.device').each(function( index ) {
+                  deviceid.push($( this ).attr('id'));
+                });
+                socket.emit('startRabbit', {'data': deviceid, 'id': '{{ session['userid'] }}' });
+            });
+
+            socket.on('consume', function(data) {
+              json = JSON.parse(data)
+              hasil = ''
+              json.forEach(function(entry) {
+                hasil = hasil + '<li>' + entry.oidname + ' : ' + entry.snmpresult + '</li>'
+              });
+
+              $('.snmpresult').each(function() {
+                if (this.id === json[0].deviceid) {
+                  $(this).html(hasil)
+                }
+              });
+            });
+        });
+    </script>
+</head>
+<p>Hello, {{ session['username'] }}!</p>
+<h1>Here come the detail!</h1>
+<p>Websocket: <span id="idlogs">Not Connected</span></p>
+<ul>
+  {% for subscribing in monitor.subscribing %}
+  <p class="device" id="{{subscribing.id}}">{{subscribing.name}} ({{subscribing.type}})</p>
+  <a href="{{ request.url_root }}devices/{{ subscribing.id }}">Info</a>
+  <ul class="snmpresult" id="{{ subscribing.id }}">
+  </ul>
+  {% endfor %}
+</ul>

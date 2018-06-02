@@ -1,0 +1,10 @@
+<title>User List</title>
+<p>Hello, {{ session['username'] }}!</p>
+<h1>Here come the list!</h1>
+{% for user in users %}
+  <ul>
+    <li>ID: {{ user.id }}</li>
+    <li>Username: {{ user.username }}</li>
+    <li><a href="{{ request.url }}/{{ user.username }}">info</a></li>
+  </ul>
+{% endfor %}
